@@ -23,7 +23,13 @@ CM_LOC_TOKEN=cm_live_... countrymanager --project <slug> --out-dir Sources/Trans
   `https://countrymanager.app`.
 
 The tool is a dependency-free POSIX shell script (`sh` + `curl` only), so it
-also runs anywhere without Homebrew:
+also installs anywhere without Homebrew:
+
+```sh
+curl -fsSL https://countrymanager.app/install.sh | sh
+```
+
+or, to vendor the script into a repo instead of installing it:
 
 ```sh
 curl -fsSO https://countrymanager.app/pull-strings.sh && chmod +x pull-strings.sh
