@@ -1,8 +1,8 @@
 class Countrymanager < Formula
   desc "Pull localization files (.strings/.stringsdict) from CountryManager"
   homepage "https://countrymanager.app"
-  url "https://github.com/countrymanager/homebrew-tap/releases/download/v1.0.2/pull-strings.sh"
-  sha256 "9f09467bde980e5d64db85d97306ab2edf1d1b03aea5f817d96c5ef3a4f32d07"
+  url "https://github.com/countrymanager/homebrew-tap/releases/download/v1.1.0/pull-strings.sh"
+  sha256 "1415dff842b9c594fd7639a9e5cefae23a6abd3fe01b8a6604c0e02a6334d1e5"
 
   def install
     bin.install "pull-strings.sh" => "countrymanager"
