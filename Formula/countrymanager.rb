@@ -10,5 +10,10 @@ class Countrymanager < Formula
 
   test do
     assert_match "Usage:", shell_output("#{bin}/countrymanager 2>&1", 1)
+    # Pin the formula's own version against the script it installed: without
+    # this, a stale `url`/`sha256` that was never bumped after a script change
+    # still passes CI, which is exactly how the two install channels drift.
+    assert_equal "countrymanager #{version}",
+                 shell_output("#{bin}/countrymanager --version").strip
   end
 end
