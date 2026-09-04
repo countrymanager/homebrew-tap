@@ -59,6 +59,10 @@ Each file lands via a hidden `.part` file, so an interrupted run never leaves a
 half-written `.strings` behind, and a failed pull keeps the previous file rather
 than truncating it.
 
+Key descriptions are exported as comments. Pass `--no-comments` to leave them
+out, which is safe to round-trip: a pushed file that says nothing about a key's
+comment leaves the stored description untouched.
+
 ## Manage keys
 
 ```sh
