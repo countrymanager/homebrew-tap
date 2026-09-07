@@ -63,10 +63,42 @@ Key descriptions are exported as comments. Pass `--no-comments` to leave them
 out, which is safe to round-trip: a pushed file that says nothing about a key's
 comment leaves the stored description untouched.
 
+### One platform's keys
+
+An iOS build and an Android build share one project, so by default both receive
+every key. `--platform` narrows the sync to what that build actually ships:
+
+```sh
+countrymanager loc sync --project <slug> --out-dir Sources/Resources --platform ios
+```
+
+A key is served unless it is tagged for a **different** platform. The platform
+tags are `iOS`, `Android` and `API`; every other tag is a topic and is ignored
+here, and a key carrying no platform tag at all ships everywhere.
+
+| Key tags | `--platform ios` | `--platform android` |
+| --- | --- | --- |
+| none | served | served |
+| `checkout` | served | served |
+| `iOS` | served | dropped |
+| `Android` | dropped | served |
+| `iOS`, `Android` | served | served |
+
+So only the exceptions need marking: tag the Play-Store-only string `Android`
+and it drops out of the iOS sync, while the untagged bulk of the catalog keeps
+flowing to both. A string table whose every key belongs to the other platform
+drops out entirely rather than landing as an empty `<Table>.strings`.
+
+The value is case-insensitive. An unrecognized one fails the run rather than
+falling back to the whole catalog, and so does an empty one - `--platform
+"$PLATFORM"` with the variable unset in CI must not quietly ship the other
+platform's strings.
+
 ## Manage keys
 
 ```sh
 countrymanager loc keys list   --project <slug>
+countrymanager loc keys list   --project <slug> --platform ios
 countrymanager loc keys create --project <slug> --name home.title \
   --description "Header on the home screen" --max-length 60 --tags nav,home
 countrymanager loc keys update --project <slug> --name home.title --max-length 40
@@ -75,7 +107,9 @@ countrymanager loc keys delete --project <slug> --name home.title --yes
 
 A key is metadata: name, description, string table, plural flag, length limit
 and tags. `--table` is create-only, because which `.strings` file a key ships in
-is build-affecting.
+is build-affecting. `--platform` applies to `list` only, and answers what a sync
+would deliver without downloading anything. Writing `--tags android` stores
+`Android`, so a platform tag is one however it is typed.
 
 ## Write translations
 
