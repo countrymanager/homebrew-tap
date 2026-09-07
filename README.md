@@ -72,6 +72,17 @@ every key. `--platform` narrows the sync to what that build actually ships:
 countrymanager loc sync --project <slug> --out-dir Sources/Resources --platform ios
 ```
 
+`loc sync` writes a whole `.lproj` tree and only speaks `.strings` +
+`.stringsdict`. To fetch ONE file in one of the seven formats, to stdout or to
+a path:
+
+```sh
+countrymanager loc pull --project <slug> --locale en --format next-intl \
+  --out messages/en.json
+countrymanager loc pull --project <slug> --locale en --format json --tag web
+countrymanager loc tags list --project <slug>
+```
+
 A key is served unless it is tagged for a **different** platform. The platform
 tags are `iOS`, `Android` and `API`; every other tag is a topic and is ignored
 here, and a key carrying no platform tag at all ships everywhere.
@@ -102,8 +113,13 @@ countrymanager loc keys list   --project <slug> --platform ios
 countrymanager loc keys create --project <slug> --name home.title \
   --description "Header on the home screen" --max-length 60 --tags nav,home
 countrymanager loc keys update --project <slug> --name home.title --max-length 40
+countrymanager loc keys update --project <slug> --name home.title --add-tag web
+countrymanager loc keys update --project <slug> --name home.title --remove-tag nav
 countrymanager loc keys delete --project <slug> --name home.title --yes
 ```
+
+`--tags` replaces the whole set; `--add-tag` and `--remove-tag` edit it in
+place and are repeatable.
 
 A key is metadata: name, description, string table, plural flag, length limit
 and tags. `--table` is create-only, because which `.strings` file a key ships in
